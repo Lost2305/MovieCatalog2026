@@ -1,0 +1,34 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+
+  
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.3
+
+    
+    - name: Restore packages
+      run: nuget restore
+
+    
+    - name: Build
+      run: msbuild /p:Configuration=Release
+
+    
+    - name: Test
+      run: vstest.console.exe **\*Tests.dll
